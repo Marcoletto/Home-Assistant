@@ -1,6 +1,6 @@
 # Home-Assistant
 Configurazione Home Assistant
-* Esordio Mar 2019*
+* Esordio Mar 2019
 
 ## Home
 ![SchedaHome](https://github.com/marcoletto/Home-Assistant/raw/master/screenshot/Home.png)
