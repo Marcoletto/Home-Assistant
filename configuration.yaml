@@ -1,0 +1,161 @@
+homeassistant:
+  name: !secret nameHA
+  latitude: !secret latitude
+  longitude: !secret longitude
+  elevation: !secret elevation
+  unit_system: metric
+  time_zone: Europe/Rome
+  # Customization file
+  customize: !include customize.yaml
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+http:
+  base_url: !secret base_url_duckDNS #inserimento dati per gestione DuckDNS e certificati
+  ssl_certificate: /ssl/fullchain.pem #invariato
+  ssl_key: /ssl/privkey.pem #invariato
+  ip_ban_enabled: true #attiviamo il ban dell' IP dopo 5 tentativi falliti
+  login_attempts_threshold: 5 #numero di tentativi prima del ban
+#fine inserimento DuckDNS
+
+# Show the introduction message on startup.
+#introduction:
+
+#######
+discovery:
+  ignore:
+    - google_cast
+    - yeelight
+#######
+
+
+####### Aggiungere qua le nuove lampadine smart
+light:
+  - platform: yeelight
+    devices:
+      192.168.1.156:
+        name: Mobile Salotto
+#######
+
+
+# Text to speech
+tts:
+  - platform: google
+
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+sensor: !include sensors.yaml
+
+#Attiviamo il file per la gestione tramite programmazione dell' interfaccia lovelace
+lovelace:
+  mode: yaml
+#fine attivazione programmazione file ui-lovelace.yaml
+
+
+###########################################
+# Attiviamo Homekit per gestire HA con Siri
+###########################################
+# Ricordiamoci, in caso di migrazione del sistema, di copiare anche il
+# file .homekit.state come richiesto al link https://www.home-assistant.io/components/homekit/
+###########################################
+
+homekit:
+  auto_start: false #si attiva dopo 5 minuti tramite automazione
+  filter:
+    exclude_domains:
+      - automation
+      - imput_boolean
+      - script
+    exclude_entities:
+      - sensor.cpu_temperature
+      - climate.giorno
+      - climate.notte
+      - sensor.inside_temperature_giorno_inside_temperature
+      - sensor.inside_temperature_notte_inside_temperature
+      - sensor.outside_temperature_giorno_outside_temperature
+      - sensor.outside_temperature_notte_outside_temperature
+      - sensor.netatmo_bagno_humidity
+      - sensor.netatmo_bagno_max_temp
+      - sensor.netatmo_bagno_min_temp
+      - sensor.netatmo_bagno_temperature
+      - sensor.netatmo_camera_co2
+      - sensor.netatmo_camera_humidity
+      - sensor.netatmo_camera_max_temp
+      - sensor.netatmo_camera_min_temp
+      - sensor.netatmo_camera_temperature
+      - sensor.netatmo_dea_s_home_co2
+      - sensor.netatmo_dea_s_home_humidity
+      - sensor.netatmo_dea_s_home_max_temp
+      - sensor.netatmo_dea_s_home_min_temp
+      - sensor.netatmo_dea_s_home_temperature
+      - sensor.netatmo_dea_s_home_temperature
+      - sensor.netatmo_esterno_max_temp
+      - sensor.netatmo_esterno_min_temp
+      - sensor.netatmo_esterno_temperature
+      - sensor.netatmo_esterno_humidity
+      - light.salotto
+    include_entities:
+      - group.salotto
+      
+      
+#####################################################################
+#####################################################################
+#####################################################################
+
+
+
+
+###inseriamo il configurator nella colonna laterale
+panel_iframe:
+  configurator: #integra il pulsante del configuration sul pannello laterale
+    title: Configurator
+    icon: mdi:wrench
+    url: !secret url_duckdns
+###fne inserimento configurator
+
+
+
+
+
+##############
+#inseriamo le righe per le notifiche telegram (lavoro da completare)
+#qua impostiamo il BOT
+telegram_bot:
+  - platform: polling
+    api_key: !secret telegram_token
+    allowed_chat_ids:
+      - !secret telegram_Marco_chat_id
+      - !secret telegram_Anna_chat_id
+
+
+notify:
+#  - name: telefoni
+#    platform: group
+#    services:
+#      - service: telegram_Marco
+#      - service: telegram_Anna
+  - name: telegram_Marco #queste righe impostano il nome da richiamare per le notifiche a Marco
+    platform: telegram
+    chat_id: !secret telegram_Marco_chat_id
+  - name: telegram_Anna #queste righe impostano il nome da richiamare per le notifiche ad Anna
+    platform: telegram
+    chat_id: !secret telegram_Anna_chat_id
+#fine righe per la gestione di telegram
+##############
+
+#inserimento Netatmo
+netatmo:
+  api_key: !secret netatmo_api_key
+  secret_key: !secret netatmo_secret_key
+  username: !secret netatmo_username
+  password:  !secret netatmo_password
+  discovery: false #discovery false per poi richiamare i sensori che mi interessano
+  
+  
+  
+  
+  
+  

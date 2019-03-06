@@ -1,0 +1,37 @@
+
+
+# righe per automatizzare il salvataggio automatico su DropBox
+  - alias: backup automatico
+    initial_state: true
+    trigger:
+      platform: time
+      at: '3:00:00'
+    condition:
+      - condition: time
+        weekday:
+          - mon
+    action:
+      - service: hassio.snapshot_full
+        data_template:
+          name: Automated Backup {{ now().strftime('%Y-%m-%d') }}
+      - service: hassio.addon_stdin
+        data:
+          addon: 7be23ff5_dropbox_sync
+          input:
+            command: upload
+#fine righe programmazione salvataggio su dropbox
+
+
+# inseriamo automazione per l' avvio di homekit dopo 5 minuti
+# questo per evitare che abbia problemi con la rete z-wave
+# thx Dr. ZZs - https://www.youtube.com/watch?v=m46HUBhZoDQ
+
+  - alias: Start Homekit
+    trigger:
+      - platform: homeassistant
+        event: start
+    action:
+      - delay: 00:05 #5 minuti
+      - service: homekit.start
+     
+# fine righe automazione start homekit

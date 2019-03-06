@@ -1,0 +1,480 @@
+title: !secret title
+views:
+
+########################################################
+########################################################
+########################################################
+########################################################
+########################################################
+################################################################
+# Pagina dedicata all' illuminazione
+
+  - title: Illuminazione
+    icon: mdi:lightbulb
+    cards:
+      - type: vertical-stack
+        cards:
+#          - type: glance
+#            show_state: false
+#            title: Salotto
+
+#            entities:
+#              - entity: light.divano
+#                tap_action:
+#                  action: toggle
+#              - entity: light.mobile_salotto
+#                tap_action:
+#                  action: toggle
+#              - entity: light.salotto ######creare gruppo luci salotto
+#                icon: mdi:flashlight-off
+#                name: ALL OFF
+#                tap_action:
+#                  action: toggle
+
+            - type: entities
+              show_header_toggle: true
+              title: Reparto Giorno
+              entities:
+              - type: section
+                label: Salotto
+              - entity: group.salotto
+                show_header_toggle: true
+                name: Generale Salotto
+                icon: mdi:power
+              - entity: light.divano
+                name: Divano
+              - entity: light.mobile_salotto
+                name: Mobile Salotto
+                icon: mdi:lamp
+              - type: section
+                label: Cucina
+########################################################
+#in test
+########################################################
+########################################################
+########################################################
+########################################################
+
+
+
+################################################################
+# Pagina dedicata alla gestione dei climatizzatori Daikin
+# con il grafico della temperatura registrata nelle ultime 8 ore
+
+  - title: Climatizzatori
+    icon: mdi:snowflake
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: thermostat
+            entity: climate.giorno
+            name: Clima Giorno
+          - type: sensor
+            entity: sensor.netatmo_dea_s_home_temperature
+            name: Temperatura Reparto Giorno (8 hours)
+            graph: line
+            detail: 2
+            hours_to_show: 8
+          - type: thermostat
+            entity: climate.notte
+            name: Clima Camere
+          - type: sensor
+            entity: sensor.netatmo_camera_temperature
+            name: Temperatura Reparto Notte (8 hours)
+            graph: line
+            detail: 2
+            hours_to_show: 8
+
+# Fine configurazione pagina Climatizzatori
+################################################################
+
+
+################################################################
+# Pagina dedicata al riassunto delle condizioni atmosferiche
+# Riassunto utile per visualizzazione da smoartphone
+
+  - title: Condizioni Atmosferiche
+    icon: mdi:weather-windy-variant
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: entities
+            show_header_toggle: false
+            name: Meteo Esterno
+            entities:
+              - entity: sensor.netatmo_esterno_temperature
+                name: Temperatura Esterna
+          - type: history-graph
+            entities:
+              - entity: sensor.netatmo_esterno_temperature
+                name: Temperatura Esterna
+                hours_to_show: 72
+          - type: history-graph
+            entities:
+              - entity: sensor.netatmo_esterno_humidity
+                name: Umidità Esterna
+                hours_to_show: 72
+          - type: history-graph
+            entities:
+              - entity: sensor.netatmo_dea_s_home_pressure
+                name: Pressione Atmosferica
+                hours_to_show: 72
+
+# Fine configurazione pagina condizioni atmosferiche
+################################################################
+
+
+################################################################
+# Pagina con il riepilogo delle prestazioni del Raspberry
+# ed Home Assistant
+
+  - title: Raspberry
+    icon: mdi:access-point-network
+    cards:
+     - type: vertical-stack
+       cards:
+         - type: entities
+           show_header_toggle: false
+           entities:
+             - sensor.cpu_temperature
+         - type: gauge
+           unit: '%'
+           entity: sensor.processor_use
+           severity:
+             green: 0
+             yellow: 35
+             red: 68
+         - type: history-graph
+           entities:
+           - sensor.cpu_temperature
+           hours_to_show: 72
+           refresh_interval: 600
+         - type: horizontal-stack
+           cards:
+             - type: glance
+               entities:
+                 - entity: automation.backup_automatico
+                   tap_action:
+                     action: call-service
+                     service: automation.backup_automatico
+
+# Fine configurazione pagina dedicata alla prestazioni RPI+HA
+################################################################
+
+
+
+
+################################################################
+################################################################
+################################################################
+################################################################
+################################################################
+
+#test "https://github.com/kalkih/mini-graph-card"
+  - title: test
+    cards:
+      - type: custom:mini-graph-card
+        entities:
+         - entity: sensor.netatmo_bagno_temperature
+           name: Temperatura
+           points_per_hour: 6
+           show:
+             fill: false
+         - entity: sensor.netatmo_bagno_humidity
+           name: Umidità
+           points_per_hour: 6
+           show:
+             graph: bar
+
+      - type: custom:mini-graph-card
+        name: Bagno Stat
+        icon: mdi:thermometer-lines
+        more_info: false
+        points_per_hour: 1
+        animate: true
+        line_width: 2
+        show:
+          fill: false
+        entities:
+#          - entity: sensor.netatmo_bagno_humidity
+#            name: Hum %
+#            color: yellow
+           - entity: sensor.netatmo_bagno_max_temp
+             name: Max °C
+             color: red
+           - entity: sensor.netatmo_bagno_min_temp
+             name: Min °C
+             color: blue
+
+################################################################
+################################################################
+################################################################
+################################################################
+################################################################
+
+
+################################################################
+# Struttura pagina riepilogo temperature interne
+
+  - title: Temperature Interne
+    type: horizontal-stack
+    icon: mdi:thermometer-lines
+    cards:
+
+# Colonna reparto notte all' interno della pagina delle temperature interne
+
+      - type: vertical-stack
+        cards:
+
+          - type: custom:mini-graph-card
+            name: Temperatura Reparto Giorno
+            entities:
+              - sensor.netatmo_dea_s_home_temperature
+            line_width: 2
+            font_size: 75
+            hour24: true
+            points_per_hour: 2
+            hours_to_show: 36
+            more_info: false
+            show:
+              icon: false
+              fill: false
+              extrema: true
+            color_thresholds:
+              - value: 16.5
+                color: black
+              - value: 18.1
+                color: blue
+              - value: 19.2
+                color: lightgreen
+              - value: 20.5
+                color: orange
+              - value: 22
+                color: red
+
+          - type: custom:mini-graph-card
+            name: Umidità Reparto Giorno
+            entities:
+              - sensor.netatmo_dea_s_home_humidity
+            line_width: 2
+            font_size: 75
+            hour24: true
+            points_per_hour: 2
+            hours_to_show: 36
+            more_info: false
+            show:
+              graph: bar
+              icon: false
+              fill: false
+              extrema: true
+              labels: true
+            color_thresholds:
+              - value: 24
+                color: black
+              - value: 36
+                color: blue
+              - value: 44
+                color: lightgreen
+              - value: 56
+                color: orange
+              - value: 74
+                color: red
+
+          - type: custom:mini-graph-card
+            name: CO2 Reparto Giorno
+            entities:
+              - sensor.netatmo_dea_s_home_co2
+            line_width: 2
+            font_size: 75
+            hour24: true
+            points_per_hour: 2
+            hours_to_show: 36
+            more_info: false
+            show:
+              graph: bar
+              icon: false
+              fill: false
+              extrema: true
+              labels: true
+            color_thresholds:
+              - value: 270
+                color: lightgreen
+              - value: 480
+                color: green
+              - value: 550
+                color: orange
+              - value: 700
+                color: darkorange
+              - value: 880
+                color: red
+              - value: 1100
+                color: "#cc1a00"
+              - value: 1500
+                color: "#7b3ab3"
+
+# Colonna reparto notte all' interno della pagina delle temperature interne
+
+      - type: vertical-stack
+        cards:
+
+          - type: custom:mini-graph-card
+            name: Temperatura Bagno
+            entities:
+              - sensor.netatmo_bagno_temperature
+            line_width: 2
+            font_size: 75
+            hour24: true
+            points_per_hour: 2
+            hours_to_show: 36
+            more_info: false
+            show:
+              icon: false
+              fill: false
+              extrema: true
+            color_thresholds:
+              - value: 16
+                color: black
+              - value: 17.8
+                color: blue
+              - value: 19
+                color: lightgreen
+              - value: 20
+                color: orange
+              - value: 22
+                color: red
+
+          - type: custom:mini-graph-card
+            name: Umidità Bagno
+            entities:
+              - sensor.netatmo_bagno_humidity
+            line_width: 2
+            font_size: 75
+            hour24: true
+            points_per_hour: 2
+            hours_to_show: 36
+            more_info: false
+            show:
+              graph: bar
+              icon: false
+              fill: false
+              extrema: true
+              labels: true
+            color_thresholds:
+              - value: 28
+                color: black
+              - value: 41
+                color: blue
+              - value: 52
+                color: lightgreen
+              - value: 73
+                color: orange
+              - value: 88
+                color: red
+
+# Colonna reparto notte all' interno della pagina delle temperature interne
+
+      - type: vertical-stack
+        cards:
+
+          - type: custom:mini-graph-card
+            name: Temperatura Reparto Notte
+            entities:
+              - sensor.netatmo_camera_temperature
+            line_width: 2
+            font_size: 75
+            hour24: true
+            points_per_hour: 2
+            hours_to_show: 36
+            more_info: false
+            show:
+              icon: false
+              fill: false
+              extrema: true
+            color_thresholds:
+              - value: 14
+                color: #191919
+              - value: 16
+                color: blue
+              - value: 18
+                color: lightgreen
+              - value: 20
+                color: orange
+              - value: 22
+                color: red
+
+          - type: custom:mini-graph-card
+            name: Umidità Reparto Notte
+            entities:
+              - sensor.netatmo_camera_humidity
+            line_width: 2
+            font_size: 75
+            hour24: true
+            points_per_hour: 2
+            hours_to_show: 36
+            more_info: false
+            show:
+              graph: bar
+              icon: false
+              fill: false
+              extrema: true
+              labels: true
+            color_thresholds:
+              - value: 28
+                color: black
+              - value: 36
+                color: blue
+              - value: 44
+                color: lightgreen
+              - value: 56
+                color: orange
+              - value: 74
+                color: red
+
+          - type: custom:mini-graph-card
+            name: CO2 Reparto Notte
+            entities:
+              - sensor.netatmo_camera_co2
+            line_width: 2
+            font_size: 75
+            hour24: true
+            points_per_hour: 2
+            hours_to_show: 36
+            more_info: false
+            show:
+              graph: bar
+              icon: false
+              fill: false
+              extrema: true
+              labels: true
+            color_thresholds:
+              - value: 280
+                color: lightgreen
+              - value: 460
+                color: green
+              - value: 580
+                color: orange
+              - value: 720
+                color: darkorange
+              - value: 900
+                color: red
+              - value: 1180
+                color: "#cc1a00"
+              - value: 1550
+                color: "#7b3ab3"
+
+# Fine struttura pagina  di riepilogo temperature interne
+################################################################
+
+
+################################################################
+################################################################
+
+# Richiamare add-on "mini-graph-card"
+# link alla pagina "https://github.com/kalkih/mini-graph-card"
+resources:
+  - url: /local/mini-graph-card-bundle.js?v=0.3.0
+    type: module
+# Chiusura righe di codice per "mini-graph-card"
+
+################################################################
+################################################################

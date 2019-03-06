@@ -1,0 +1,8 @@
+
+
+# Creazione Gruppo Luci Salotto
+  salotto:
+    view: 
+    entities:
+      - light.divano
+      - light.mobile_salotto

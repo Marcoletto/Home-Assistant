@@ -1,0 +1,132 @@
+  # Weather prediction
+  - platform: yr
+
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+      - 'date_time'
+      - 'time_date'
+      - 'time_utc'
+
+  - platform: systemmonitor
+    resources:
+    - type: disk_use_percent
+      arg: /
+    - type: memory_free
+    - type: memory_use_percent
+    - type: processor_use
+    - type: last_boot
+    - type: network_in
+      arg: eth0
+    - type: network_out
+      arg: eth0
+  - platform: command_line
+    name: CPU Temperature
+    command: cat /sys/class/thermal/thermal_zone0/temp
+    unit_of_measurement: °C
+    value_template: '{{ value | multiply(0.001) | round(1) }}'
+
+############ Fasi lunari tramite template (preso da sensor.yaml di Daxda https://github.com/daxda/HomeAssistant/blob/master/sensor.yaml)
+  - platform: template
+    sensors:
+      fasilunari:
+        friendly_name: "Luna"
+        icon_template: >
+          {% if is_state('sensor.moon', 'new_moon') %}
+            mdi:circle-outline
+          {% elif is_state('sensor.moon', 'waxing_crescent') %}
+            mdi:arrow-up-bold
+          {% elif is_state('sensor.moon', 'first_quarter') %}
+            mdi:arrow-up-bold
+          {% elif is_state('sensor.moon', 'waxing_gibbous') %}
+            mdi:arrow-up-bold
+          {% elif is_state('sensor.moon', 'full_moon') %}
+            mdi:brightness-1
+          {% elif is_state('sensor.moon', 'waning_gibbous') %}
+            mdi:arrow-down-bold
+          {% elif is_state('sensor.moon', 'last_quarter') %}
+            mdi:arrow-down-bold
+          {% elif is_state('sensor.moon', 'waning_crescent') %}
+            mdi:arrow-down-bold
+          {% endif %}
+        value_template: >
+          {% if is_state('sensor.moon', 'new_moon') %}
+            Luna Nuova
+          {% elif is_state('sensor.moon', 'waxing_crescent') %}
+            Luna Crescente
+          {% elif is_state('sensor.moon', 'first_quarter') %}
+            Primo Quarto
+          {% elif is_state('sensor.moon', 'waxing_gibbous') %}
+            Gibbosa Crescente
+          {% elif is_state('sensor.moon', 'full_moon') %}
+            Luna Piena
+          {% elif is_state('sensor.moon', 'waning_gibbous') %}
+            Gibbosa Calante
+          {% elif is_state('sensor.moon', 'last_quarter') %}
+            Ultimo Quarto
+          {% elif is_state('sensor.moon', 'waning_crescent') %}
+            Luna Calante
+          {% endif %}
+
+
+#inserimento sensori netatmo
+  - platform: netatmo
+    station: !secret station1
+    modules:
+      Pluviometro_DeA:
+        - battery_vp
+        - battery_percent
+        - rf_status
+        - rain
+        - sum_rain_1
+        - sum_rain_24
+      Esterno:
+        - battery_vp
+        - battery_percent
+        - rf_status
+        - temperature
+        - min_temp
+        - max_temp
+        - humidity
+      Anemometro_DeA:
+        - battery_vp
+        - battery_percent
+        - rf_status
+        - windstrength
+        - windangle
+        - guststrength
+        - gustangle
+      Interno:
+        - wifi_status
+
+  - platform: netatmo
+    station: !secret station2
+    modules:
+      Bagno:
+        - battery_vp
+        - battery_percent
+        - rf_status
+        - temperature
+        - min_temp
+        - max_temp
+        - humidity
+      Camera:
+        - battery_vp
+        - battery_percent
+        - rf_status
+        - temperature
+        - min_temp
+        - max_temp
+        - humidity
+        - co2
+      DeA's_Home:
+        - wifi_status
+        - temperature
+        - min_temp
+        - max_temp
+        - pressure
+        - humidity
+        - co2
+        - noise
+###fine inserimento sensori netatmo
