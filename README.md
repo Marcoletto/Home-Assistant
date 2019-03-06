@@ -2,12 +2,12 @@
 Configurazione Home Assistant
 
 ## Home
-![SchedaHome](https://github.com/marcoletto/Home-Assistant/screenshot/Home.png)
+![SchedaHome](https://github.com/marcoletto/Home-Assistant/raw/master/screenshot/Home.png)
 ## Climatizzatori
-![SchedaHome](https://github.com/marcoletto/Home-Assistant/screenshot/Climatizzatori.png)
+![SchedaHome](https://github.com/marcoletto/Home-Assistant/raw/master/screenshot/Climatizzatori.png)
 ## Meteo
-![SchedaHome](https://github.com/marcoletto/Home-Assistant/screenshot/Meteo.png)
+![SchedaHome](https://github.com/marcoletto/Home-Assistant/raw/master/screenshot/Meteo.png)
 ## Raspberry
-![SchedaHome](https://github.com/marcoletto/Home-Assistant/screenshot/Raspberry.png)
+![SchedaHome](https://github.com/marcoletto/Home-Assistant/raw/master/screenshot/Raspberry.png)
 ## Temperature 
-![SchedaHome](https://github.com/marcoletto/Home-Assistant/screenshot/Temperature.png)
+![SchedaHome](https://github.com/marcoletto/Home-Assistant/raw/master/screenshot/Temperature.png)
