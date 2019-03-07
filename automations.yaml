@@ -1,5 +1,6 @@
 
-
+##########################################
+##########################################
 # righe per automatizzare il salvataggio automatico su DropBox
   - alias: backup automatico
     initial_state: true
@@ -20,8 +21,12 @@
           input:
             command: upload
 #fine righe programmazione salvataggio su dropbox
+##########################################
+##########################################
 
 
+##########################################
+##########################################
 # inseriamo automazione per l' avvio di homekit dopo 5 minuti
 # questo per evitare che abbia problemi con la rete z-wave
 # thx Dr. ZZs - https://www.youtube.com/watch?v=m46HUBhZoDQ
@@ -33,5 +38,31 @@
     action:
       - delay: 00:05 #5 minuti
       - service: homekit.start
-     
+
 # fine righe automazione start homekit
+##########################################
+##########################################
+
+
+
+##########################################
+##########################################
+#Inseriamo una notifica che avvisi di un tentato login fallito
+  - alias: Notifica Login Fallito
+    # copiata da https://community.home-assistant.io/t/how-to-get-the-ip-address-from-a-failed-login-notification/39899/15
+    trigger:
+      - platform: state
+        entity_id: persistent_notification.httplogin
+    condition:
+      - condition: template
+        value_template: "{{ trigger.to_state.state != off }}"
+    action:
+      - service: notify.telegram_Marco
+        data_template:
+          title: "Tentativo di Login fallito su Home Assistant!"
+          message: "{{ states.persistent_notification.httplogin.attributes.message }}"
+          data:
+            url: http://www.ip-tracker.org/locator/ip-lookup.php?ip={{ states.persistent_notification.httplogin.attributes.message.split ("from ") [1]}}
+#fine righe per notifica telegram tentato Login
+##########################################
+##########################################
