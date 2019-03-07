@@ -57,7 +57,7 @@
       - condition: template
         value_template: "{{ trigger.to_state.state != off }}"
     action:
-      - service: notify.telegram_Marco
+      - service: notify.telegram_marco
         data_template:
           title: "Tentativo di Login fallito su Home Assistant!"
           message: "{{ states.persistent_notification.httplogin.attributes.message }}"
