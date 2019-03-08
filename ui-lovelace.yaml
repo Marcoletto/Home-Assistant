@@ -66,6 +66,18 @@ views:
     cards:
       - type: vertical-stack
         cards:
+          - type: glance
+            entities:
+            - entity: switch.scaldabagno_up
+              name: Scaldabagno
+              icon: mdi:radiator
+              tap_action:
+                action: toggle
+            - entity: sensor.netatmo_bagno_temperature
+              name: °T Bagno
+              icon: mdi:toilet
+              tap_action:
+                action: none
           - type: thermostat
             entity: climate.giorno
             name: Clima Giorno

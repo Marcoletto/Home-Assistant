@@ -97,6 +97,7 @@ homekit:
       - sensor.netatmo_esterno_temperature
       - sensor.netatmo_esterno_humidity
       - light.salotto
+
     include_entities:
       - group.salotto
       
@@ -154,8 +155,18 @@ netatmo:
   password:  !secret netatmo_password
   discovery: false #discovery false per poi richiamare i sensori che mi interessano
   
-  
-  
-  
-  
-  
+
+
+#######################################################
+#######################################################
+#######################################################
+# Inserimento TPLink
+
+tplink:
+
+
+
+
+
+
+
